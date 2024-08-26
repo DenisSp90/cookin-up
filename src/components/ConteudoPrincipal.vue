@@ -1,49 +1,37 @@
 <script lang="ts">
 import SelecionarIngredientes from './SelecionarIngredientes.vue';
+import SuaLista from './SuaLista.vue';
+import Tag from './Tag.vue';
 
 export default {
-    data() {
-        return {
-            ingredientes: ['Alho', 'Manteiga', 'Orégano']
-        };
-    },
-    components: { SelecionarIngredientes }
+  data() {
+    return {
+      ingredientes: ['Alho', 'Manteiga', 'Orégano']
+    };
+  },
+  components: { SelecionarIngredientes, Tag, SuaLista }
 }
 </script>
 
 <template>
-    <main class="conteudo-principal">
-        <section>
-            <span class="subtitulo-lg sua-lista-texto">
-                Sua Lista:
-            </span>
+  <main class="conteudo-principal">
+    <SuaLista :ingredientes="ingredientes" />
 
-            <ul v-if="ingredientes.length" class="ingredientes-sua-lista">
-                <li v-for="ingrediente in ingredientes" :key="ingrediente" class="ingrediente">
-                    {{ ingrediente }}
-                </li>
-            </ul>
-            <p v-else class="paragrafo lista-vazia">
-                <img src="../assets/imagens/icones/lista-vazia.svg" alt="Ícone de pesquisa">
-                Sua lista está vazia, selecione ingredientes para iniciar.
-            </p>
-
-        </section>
-
-        <SelecionarIngredientes />
-    </main>
+    <SelecionarIngredientes />
+  </main>
 </template>
+
 <style scoped>
 .conteudo-principal {
-    padding: 6.5rem 7.5rem;
-    border-radius: 3.75rem 3.75rem 0rem 0rem;
-    background: var(--creme, #FFFAF3);
-    color: var(--cinza, #444);
+  padding: 6.5rem 7.5rem;
+  border-radius: 3.75rem 3.75rem 0rem 0rem;
+  background: var(--creme, #FFFAF3);
+  color: var(--cinza, #444);
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5rem;
 }
 
 .sua-lista-texto {
@@ -58,18 +46,6 @@ export default {
     justify-content: center;
     gap: 1rem 1.5rem;
     flex-wrap: wrap;
-}
-
-.ingrediente {
-    display: inline-block;
-    border-radius: 0.5rem;
-    min-width: 4.25rem;
-    padding: 0.5rem;
-    text-align: center;
-    transition: 0.2s;
-    color: var(--creme, #FFFAF3);
-    background: var(--coral, #F0633C);
-    font-weight: 700;
 }
 
 .lista-vazia {
