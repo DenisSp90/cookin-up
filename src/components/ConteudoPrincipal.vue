@@ -1,15 +1,19 @@
 <script lang="ts">
+import MostrarReceitas from './MostrarReceitas.vue';
 import SelecionarIngredientes from './SelecionarIngredientes.vue';
 import SuaLista from './SuaLista.vue';
 import Tag from './Tag.vue';
 
+type Pagina = 'SelecionarIngredientes' | 'MostrarReceitas';
+
 export default {
   data() {
     return {
-      ingredientes: [] as string[]
+      ingredientes: [] as string[],
+      conteudo: 'SelecionarIngredientes' as Pagina
     };
   },
-  components: { SelecionarIngredientes, Tag, SuaLista },
+  components: { SelecionarIngredientes, Tag, SuaLista, MostrarReceitas },
   methods: {
     adicionarIngrediente(ingrediente: string) {
       this.ingredientes.push(ingrediente)
@@ -17,6 +21,9 @@ export default {
     removerIngrediente(ingrediente: string) {
       this.ingredientes = this.ingredientes.filter(iLista => ingrediente !== iLista);
     },
+    navegar(pagina: Pagina) {
+      this.conteudo = pagina;
+    }
   }
 }
 </script>
@@ -25,10 +32,18 @@ export default {
   <main class="conteudo-principal">
     <SuaLista :ingredientes="ingredientes" />
 
-    <SelecionarIngredientes
-      @adicionar-ingrediente="adicionarIngrediente"
-      @remover-ingrediente="removerIngrediente"
-    />
+    <KeepAlive include="SelecionarIngredientes">
+      <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'"
+        @adicionar-ingrediente="adicionarIngrediente"
+        @remover-ingrediente="removerIngrediente"
+        @buscar-receitas="navegar('MostrarReceitas')"
+      />
+  
+      <MostrarReceitas v-else-if="conteudo === 'MostrarReceitas'"
+        :ingredientes="ingredientes"
+        @editar-receitas="navegar('SelecionarIngredientes')"
+      />
+    </KeepAlive>
   </main>
 </template>
 
@@ -60,27 +75,27 @@ export default {
 }
 
 .lista-vazia {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 
-    color: var(--coral, #F0633C);
-    text-align: center;
+  color: var(--coral, #F0633C);
+  text-align: center;
 }
 
 @media only screen and (max-width: 1300px) {
-    .conteudo-principal {
-        padding: 5rem 3.75rem;
-        gap: 3.5rem;
-    }
+  .conteudo-principal {
+    padding: 5rem 3.75rem;
+    gap: 3.5rem;
+  }
 }
 
 @media only screen and (max-width: 767px) {
-    .conteudo-principal {
-        padding: 4rem 1.5rem;
-        gap: 4rem;
-    }
+  .conteudo-principal {
+    padding: 4rem 1.5rem;
+    gap: 4rem;
+  }
 }
 </style>
